@@ -1,5 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, Card, CardHeader, CardContent, CardActions, Button, Autocomplete, CircularProgress } from '@mui/material';
+import {
+  TextField,
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Button,
+  Autocomplete,
+  CircularProgress,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  FormHelperText,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
@@ -10,6 +25,7 @@ interface FormInterface {
   surname: string;
   age: string;
   city: CityOption[];
+  gender: '' | 'female' | 'male';
 }
 
 const validationSchema = yup.object().shape({
@@ -41,6 +57,7 @@ const validationSchema = yup.object().shape({
     )
     .min(1, 'Select at least one option.')
     .max(2, 'The maximum number of options has been exceeded.'),
+  gender: yup.string().oneOf(['female', 'male'], 'Select the correct gender.'),
 });
 
 export function DemoForm() {
@@ -52,7 +69,7 @@ export function DemoForm() {
         console.log(values);
       },
       validationSchema,
-      initialValues: { surname: '', name: '', age: '', city: [] },
+      initialValues: { surname: '', name: '', age: '', city: [], gender: '' },
       validateOnMount: true,
     });
 
@@ -133,6 +150,21 @@ export function DemoForm() {
               />
             )}
           />
+          <FormControl variant="standard" error={!!touched.gender && !!errors.gender}>
+            <FormLabel>Gender</FormLabel>
+            <RadioGroup
+              value={values.gender}
+              onChange={(event, value) => {
+                setFieldTouched('gender');
+                setFieldValue('gender', value);
+              }}
+            >
+              <FormControlLabel control={<Radio />} value="female" label="Female" />
+              <FormControlLabel control={<Radio />} value="male" label="Male" />
+              <FormControlLabel control={<Radio />} value="incorrect" label="Incorrect" />
+            </RadioGroup>
+            {!!touched.gender && !!errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
+          </FormControl>
         </CardContent>
         <CardActions>
           <Button type="submit" disabled={!isValid} variant="contained">
