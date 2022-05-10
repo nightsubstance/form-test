@@ -1,26 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ThemeProvider, createTheme, CssBaseline, GlobalStyles, colors } from '@mui/material';
+import { DemoForm } from './components/DemoForm';
 
-function App() {
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: { main: colors.cyan[500] },
+  },
+});
+
+export function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <GlobalStyles
+        styles={{
+          'html, body, #root': {
+            width: '100%',
+            height: '100%',
+          },
+          '#root': {
+            display: 'grid',
+            alignItems: 'start',
+            justifyItems: 'center',
+            padding: '24px 0',
+            rowGap: '24px',
+          },
+        }}
+      />
+      <DemoForm />
+    </ThemeProvider>
   );
 }
-
-export default App;
